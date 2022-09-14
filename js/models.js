@@ -71,7 +71,8 @@ class StoryList {
    * Returns the new Story instance
    */
 
-  async addStory(user, { title, author, url }) {
+  // Used in file stories.js in sync function addSubmittedStory.
+  static async addStory(user, { title, author, url }) {
     const token = user.loginToken;
     const response = await axios({
       url: `${BASE_URL}/stories`,

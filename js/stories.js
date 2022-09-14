@@ -30,6 +30,7 @@ function generateStoryMarkup(story) {
   const hostName = story.getHostName();
   return $(`
       <li id="${story.storyId}">
+      <span class="star">&star;</span>
         <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
         </a>
@@ -71,13 +72,13 @@ async function addSubmittedStory(evt) {
   const url = $("#create-url").val();
 
   // StoryList.addStory is found in models.js
-  const story = await StoryList.addStory(currentUser, {
+  const story = await StoryList.addStory(user, {
     title,
-    url,
     author,
-    user,
+    url,
   });
 
+  // Function generateStoryMarkup is found further up this page.
   const $story = generateStoryMarkup(story);
   $allStoriesList.prepend($story);
 
@@ -87,3 +88,12 @@ async function addSubmittedStory(evt) {
 
 // Click event for story submission. Function addSubmittedStory is found above.
 $submitForm.on("submit", addSubmittedStory);
+
+function favorite(evt) {
+  if (evt.target.tagName === "SPAN") {
+    console.log("clicked");
+    evt.target.textContent = "&starf;";
+  }
+}
+
+$allStoriesList.on("click", favorite);
