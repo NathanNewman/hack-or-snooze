@@ -199,4 +199,33 @@ class User {
       return null;
     }
   }
+  // adds a story to favorites.
+  async addFavorite(storyId) {
+    this.favorites.push(storyId);
+    console.log(this.favorites);
+    await this.addOrRemoveFavorite("add", storyId);
+  }
+  // removes a story from favorites
+  async removeFavorite(storyId) {
+    this.favorites = this.favorites.filter((s) => s.storyId !== storyId);
+    console.log(this.favorites);
+    await this.addOrRemoveFavorite("remove", storyId);
+  }
+  // Used above in async addFavorite(storyId) and async removeFavorite(storyId)
+  async addOrRemoveFavorite(newState, storyId) {
+    const method = newState === "add" ? "POST" : "DELETE";
+    const token = this.loginToken;
+    await axios({
+      url: `${BASE_URL}/users/${this.username}/favorites/${storyId}`,
+      method: method,
+      data: { token },
+    });
+  }
+  // Used in nav.js
+  static async getFavorites() {
+    for (const story in this.favorities) {
+      console.log(story);
+      generateFavoritesMarkup(story);
+    }
+  }
 }

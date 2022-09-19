@@ -124,8 +124,11 @@ function saveUserCredentialsInLocalStorage() {
 function updateUIOnUserLogin() {
   console.debug("updateUIOnUserLogin");
 
+  putStoriesOnPage();
+
   $allStoriesList.show();
   $navSubmitStory.show();
+  $navFavorites.show();
 
   // Found in nav.js
   updateNavOnLogin();

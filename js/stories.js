@@ -28,9 +28,29 @@ function generateStoryMarkup(story) {
 
   // getHostName() is found in file models.js
   const hostName = story.getHostName();
+
   return $(`
       <li id="${story.storyId}">
-      <span class="star">&star;</span>
+        <span class="star">&star;</span>
+        <a href="${story.url}" target="a_blank" class="story-link">
+          ${story.title}
+        </a>
+        <small class="story-hostname">(${hostName})</small>
+        <small class="story-author">by ${story.author}</small>
+        <small class="story-user">posted by ${story.username}</small>
+      </li>
+    `);
+}
+
+function generateFavoritesMarkup(story) {
+  // console.debug("generateStoryMarkup", story);
+
+  // getHostName() is found in file models.js
+  const hostName = story.getHostName();
+
+  return $(`
+      <li id="${story.storyId}">
+        <span class="star">&star;</span>
         <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
         </a>
@@ -89,11 +109,18 @@ async function addSubmittedStory(evt) {
 // Click event for story submission. Function addSubmittedStory is found above.
 $submitForm.on("submit", addSubmittedStory);
 
-function favorite(evt) {
-  if (evt.target.tagName === "SPAN") {
-    console.log("clicked");
-    evt.target.textContent = "&starf;";
+async function favorite(evt) {
+  let storyId = evt.target.parentElement.id;
+  if (evt.target.innerHTML === "★") {
+    evt.target.innerHTML = "☆";
+    // removerFavorite(story) is found in models.js
+    await currentUser.removeFavorite(storyId);
+  } else {
+    evt.target.innerHTML = "★";
+    // addFavorite(story) is found in models.js
+    await currentUser.addFavorite(storyId);
   }
 }
+// delegated events
 
-$allStoriesList.on("click", favorite);
+$allStoriesList.on("click", ".star", favorite);

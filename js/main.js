@@ -6,6 +6,7 @@ const $body = $("body");
 
 const $storiesLoadingMsg = $("#stories-loading-msg");
 const $allStoriesList = $("#all-stories-list");
+const $favoritedStories = $("#favorited-stories");
 
 const $loginForm = $("#login-form");
 const $signupForm = $("#signup-form");
@@ -16,16 +17,18 @@ const $navLogin = $("#nav-login");
 const $navUserProfile = $("#nav-user-profile");
 const $navLogOut = $("#nav-logout");
 const $navSubmitStory = $("#add-story");
+const $navFavorites = $("#favorites");
 
 /** To make it easier for individual components to show just themselves, this
  * is a useful function that hides pretty much everything on the page. After
  * calling this, individual components can re-show just what they want.
  */
 
-// Used in nav.js in function navAllStories(evt) and function navLoginClick(evt).
+// Used in nav.js in function navAllStories(), navFavoritesList(), and function navLoginClick(evt).
 function hidePageComponents() {
   const components = [$allStoriesList, $loginForm, $signupForm];
   components.forEach((c) => c.hide());
+  $submitForm.hide();
 }
 
 /** Overall function to kick off the app. */
