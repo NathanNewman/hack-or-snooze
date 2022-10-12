@@ -201,8 +201,8 @@ class User {
   }
   // adds a story to favorites.
   async addFavorite(storyId) {
-    this.favorites.push(storyId);
-    console.log(this.favorites);
+    let story = storyList.stories.find(el =>el.storyId === storyId)
+    this.favorites.push(story);
     await this.addOrRemoveFavorite("add", storyId);
   }
   // removes a story from favorites
@@ -222,10 +222,14 @@ class User {
     });
   }
   // Used in nav.js
-  static async getFavorites() {
-    for (const story in this.favorities) {
-      console.log(story);
-      generateFavoritesMarkup(story);
+  getFavorites() {
+    $favoritedStories.empty();
+    // console.log(this.favorites);
+    for (const story of this.favorites) {
+      // Found in stories.js
+      const $favorites = generateFavoritesMarkup(story);
+      $favoritedStories.append($favorites);
     }
+    return $favoritedStories.show();
   }
 }

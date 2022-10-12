@@ -23,15 +23,18 @@ async function getAndShowStoriesOnStart() {
  */
 
 // Used further down this page under function putStoriesOnPage(). It is in the for loop.
-function generateStoryMarkup(story) {
-  // console.debug("generateStoryMarkup", story);
+function generateStoryMarkup(story, favorite) {
+  let star = "☆";
+  if (favorite === true){
+    star = "★";
+  }
 
   // getHostName() is found in file models.js
   const hostName = story.getHostName();
 
   return $(`
       <li id="${story.storyId}">
-        <span class="star">&star;</span>
+        <span class="star">${star}</span>
         <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
         </a>
@@ -42,6 +45,7 @@ function generateStoryMarkup(story) {
     `);
 }
 
+// Used in models.js in function getFavorites()
 function generateFavoritesMarkup(story) {
   // console.debug("generateStoryMarkup", story);
 
@@ -50,7 +54,6 @@ function generateFavoritesMarkup(story) {
 
   return $(`
       <li id="${story.storyId}">
-        <span class="star">&star;</span>
         <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
         </a>
@@ -67,13 +70,20 @@ function generateFavoritesMarkup(story) {
 // Also used in file nav.js in function navAllStories(evt).
 function putStoriesOnPage() {
   console.debug("putStoriesOnPage");
-
+  const favorites = currentUser.favorites
+  console.log(currentUser.favorites);
   $allStoriesList.empty();
+  
 
   // loop through all of our stories and generate HTML for them
   for (let story of storyList.stories) {
+    let favorite = false;
+    if (favorites.includes(story)){
+      favorite=true;
+      console.log("true");
+    }
     // Found further up this page
-    const $story = generateStoryMarkup(story);
+      const $story = generateStoryMarkup(story, favorite);
     // $allStoriesList is a variable in main.js which is used as a selector for
     // <ol id="all-stories-list" class="stories-list"> in index.html
     $allStoriesList.append($story);
@@ -113,7 +123,7 @@ async function favorite(evt) {
   let storyId = evt.target.parentElement.id;
   if (evt.target.innerHTML === "★") {
     evt.target.innerHTML = "☆";
-    // removerFavorite(story) is found in models.js
+    // removeFavorite(story) is found in models.js
     await currentUser.removeFavorite(storyId);
   } else {
     evt.target.innerHTML = "★";

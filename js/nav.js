@@ -56,7 +56,8 @@ function navFavoritesList() {
   // Found in file main.js
   hidePageComponents();
   // Found in models.js
-  currentUser.getFavorites();
+  const favorites = currentUser.getFavorites();
+  console.log(favorites);
 }
 
 // click event to trigger navFavoritesList(), the above function
