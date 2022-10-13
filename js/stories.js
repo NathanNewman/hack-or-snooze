@@ -25,7 +25,7 @@ async function getAndShowStoriesOnStart() {
 // Used further down this page under function putStoriesOnPage(). It is in the for loop.
 function generateStoryMarkup(story, favorite) {
   let star = "☆";
-  if (favorite === true){
+  if (favorite === true) {
     star = "★";
   }
 
@@ -63,6 +63,22 @@ function generateFavoritesMarkup(story) {
       </li>
     `);
 }
+function generateOwnStoriesMarkup(story) {
+  console.log(story);
+  // getHostName() is found in file models.js
+  const hostName = story.getHostName();
+
+  return $(`
+      <li id="${story.storyId}">
+        <a href="${story.url}" target="a_blank" class="story-link">
+          ${story.title}
+        </a>
+        <small class="story-hostname">(${hostName})</small>
+        <small class="story-author">by ${story.author}</small>
+        <small class="story-user">posted by ${story.username}</small>
+      </li>
+    `);
+}
 
 /** Gets list of stories from server, generates their HTML, and puts on page. */
 
@@ -70,20 +86,25 @@ function generateFavoritesMarkup(story) {
 // Also used in file nav.js in function navAllStories(evt).
 function putStoriesOnPage() {
   console.debug("putStoriesOnPage");
-  const favorites = currentUser.favorites
-  console.log(currentUser.favorites);
+  let favorites = [];
+  // If a user is logged in, creates an array of user's favorities
+  if (currentUser) {
+    favorites = currentUser.favorites.map((story) => story.storyId);
+  }
   $allStoriesList.empty();
-  
 
   // loop through all of our stories and generate HTML for them
   for (let story of storyList.stories) {
     let favorite = false;
-    if (favorites.includes(story)){
-      favorite=true;
-      console.log("true");
+    // if user is logged in, identifies user favorites that exist on page.
+    if (currentUser) {
+      if (favorites.includes(story.storyId)) {
+        favorite = true;
+        console.log("true");
+      }
     }
     // Found further up this page
-      const $story = generateStoryMarkup(story, favorite);
+    const $story = generateStoryMarkup(story, favorite);
     // $allStoriesList is a variable in main.js which is used as a selector for
     // <ol id="all-stories-list" class="stories-list"> in index.html
     $allStoriesList.append($story);

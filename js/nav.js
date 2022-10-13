@@ -10,6 +10,8 @@ function navAllStories(evt) {
   console.debug("navAllStories", evt);
   // Found in file main.js
   hidePageComponents();
+  $favoritedStories.hide();
+  $ownStories.hide();
   // Found in file stories.js
   putStoriesOnPage();
 }
@@ -45,7 +47,9 @@ function updateNavOnLogin() {
 function navSubmitStory() {
   // Found in file main.js
   hidePageComponents();
-  $allStoriesList.show();
+  $allStoriesList.hide();
+  $favoritedStories.hide();
+  $ownStories.hide();
   $submitForm.show();
 }
 // click event to trigger navSubmitStory(), the above function.
@@ -55,10 +59,24 @@ $navSubmitStory.on("click", navSubmitStory);
 function navFavoritesList() {
   // Found in file main.js
   hidePageComponents();
+  $allStoriesList.hide();
+  $submitForm.hide();
+  $ownStories.hide();
   // Found in models.js
   const favorites = currentUser.getFavorites();
-  console.log(favorites);
 }
 
 // click event to trigger navFavoritesList(), the above function
 $navFavorites.on("click", navFavoritesList);
+
+function navStories(){
+  // Found in file main.js
+  hidePageComponents();
+  $allStoriesList.hide();
+  $favoritedStories.hide();
+  $submitForm.hide();
+  //Found in models.js
+  const stories = currentUser.getOwnStories();
+
+}
+$navStories.on("click", navStories);

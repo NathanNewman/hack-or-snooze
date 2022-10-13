@@ -129,6 +129,7 @@ function updateUIOnUserLogin() {
   $allStoriesList.show();
   $navSubmitStory.show();
   $navFavorites.show();
+  $navStories.show();
 
   // Found in nav.js
   updateNavOnLogin();

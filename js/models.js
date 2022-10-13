@@ -73,7 +73,8 @@ class StoryList {
 
   // Used in file stories.js in sync function addSubmittedStory.
   static async addStory(user, { title, author, url }) {
-    const token = user.loginToken;
+    const token = currentUser.loginToken;
+    console.log(currentUser.loginToken);
     const response = await axios({
       url: `${BASE_URL}/stories`,
       method: "POST",
@@ -81,9 +82,17 @@ class StoryList {
     });
 
     const story = new Story(response.data.story);
-    this.stories.unshift(story);
-    user.ownStories.unshift(story);
 
+    currentStoryList.stories.unshift(story);
+    if (this.ownStories) {
+      this.ownStories.unshift(story);
+    } else {
+      this.ownStories = [story];
+    }
+    // this.stories.unshift(story);
+    // user.ownStories.unshift(story);
+    console.log(this.stories);
+    console.log(this.ownStories);
     return story;
   }
 }
@@ -201,7 +210,7 @@ class User {
   }
   // adds a story to favorites.
   async addFavorite(storyId) {
-    let story = storyList.stories.find(el =>el.storyId === storyId)
+    let story = storyList.stories.find((el) => el.storyId === storyId);
     this.favorites.push(story);
     await this.addOrRemoveFavorite("add", storyId);
   }
@@ -231,5 +240,16 @@ class User {
       $favoritedStories.append($favorites);
     }
     return $favoritedStories.show();
+  }
+  getOwnStories() {
+    $ownStories.empty();
+    console.log(this.ownStories);
+
+    for (const story of this.ownStories) {
+      // Found in stories.js
+      const $ownStory = generateOwnStoriesMarkup(story);
+      $ownStories.append($ownStory);
+    }
+    return $ownStories.show();
   }
 }
