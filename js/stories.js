@@ -47,13 +47,14 @@ function generateStoryMarkup(story, favorite) {
 
 // Used in models.js in function getFavorites()
 function generateFavoritesMarkup(story) {
-  // console.debug("generateStoryMarkup", story);
+  let star = "★";
 
   // getHostName() is found in file models.js
   const hostName = story.getHostName();
 
   return $(`
       <li id="${story.storyId}">
+      <span class="star">${star}</span>
         <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
         </a>
@@ -64,7 +65,7 @@ function generateFavoritesMarkup(story) {
     `);
 }
 function generateOwnStoriesMarkup(story) {
-  console.log(story);
+  let heart = "♥";
   // getHostName() is found in file models.js
   const hostName = story.getHostName();
 
@@ -135,6 +136,7 @@ async function addSubmittedStory(evt) {
 
   $submitForm.slideUp("slow");
   $submitForm.trigger("reset");
+  location.reload();
 }
 
 // Click event for story submission. Function addSubmittedStory is found above.
@@ -153,5 +155,11 @@ async function favorite(evt) {
   }
 }
 // delegated events
+async function removeStory(evt){
+  let storyId = evt.target.parentElement.id;
+  await currentUser.removeOwnStory(storyId);
+}
 
 $allStoriesList.on("click", ".star", favorite);
+
+$favoritedStories.on("click", ".star", favorite);

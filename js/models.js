@@ -83,7 +83,6 @@ class StoryList {
 
     const story = new Story(response.data.story);
 
-    currentStoryList.stories.unshift(story);
     if (this.ownStories) {
       this.ownStories.unshift(story);
     } else {
@@ -95,6 +94,7 @@ class StoryList {
     console.log(this.ownStories);
     return story;
   }
+  
 }
 
 /******************************************************************************
@@ -217,7 +217,6 @@ class User {
   // removes a story from favorites
   async removeFavorite(storyId) {
     this.favorites = this.favorites.filter((s) => s.storyId !== storyId);
-    console.log(this.favorites);
     await this.addOrRemoveFavorite("remove", storyId);
   }
   // Used above in async addFavorite(storyId) and async removeFavorite(storyId)
@@ -252,4 +251,5 @@ class User {
     }
     return $ownStories.show();
   }
+    
 }

@@ -14,6 +14,7 @@ const $loginForm = $("#login-form");
 const $signupForm = $("#signup-form");
 const $submitForm = $("#submit-form");
 const $star = $(".star");
+const $heart = $(".heart");
 
 const $navLogin = $("#nav-login");
 const $navUserProfile = $("#nav-user-profile");
@@ -41,7 +42,7 @@ async function start() {
   console.debug("start");
 
   // "Remember logged-in user" and log in, if credentials in localStorage
-  // Found in users.js
+  // Found in user.js
   await checkForRememberedUser();
   // getAndShowStoriesOnStart() is found in file stories.js.
   await getAndShowStoriesOnStart();
@@ -59,5 +60,5 @@ console.warn(
     " seeing those helpful debug messages. In your browser console, click on" +
     " menu 'Default Levels' and add Verbose"
 );
-// tells async function start() to run.
+// Tells async function start() to run. Start is found above on this page.
 $(start);
